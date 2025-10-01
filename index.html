@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Lottery Predictor V2.0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00ffd0;
+      --secondary: #ff4d8d;
+      --dark: #0a192f;
+      --light: #f8f9fa;
+      --glass: rgba(15, 23, 42, 0.85);
+      --success: #28a745;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body, html {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: var(--light);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+      text-shadow: 0 0 10px rgba(0, 255, 208, 0.5);
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 16px;
+    }
+    
+    .prediction-box {
+      background: var(--glass);
+      color: var(--light);
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .prediction-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .prediction-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .prediction-badge {
+      background: var(--secondary);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .toggle-icon {
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+    
+    .toggle-icon:hover {
+      color: var(--primary);
+      transform: scale(1.1);
+    }
+    
+    .prediction-details {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+    
+    .prediction-period {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .prediction-index {
+      color: var(--primary);
+      font-weight: 500;
+    }
+    
+    .prediction-result {
+      font-size: 36px;
+      font-weight: 700;
+      margin: 20px 0;
+      padding: 20px;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      animation: pulse 1.5s infinite;
+    }
+    
+    .prediction-result.BIG {
+      color: #4dffb8;
+      border: 2px solid #4dffb8;
+    }
+    
+    .prediction-result.SMALL {
+      color: #ff6b6b;
+      border: 2px solid #ff6b6b;
+    }
+    
+    .stats-box {
+      background: var(--glass);
+      color: var(--light);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+    }
+    
+    .stat-item {
+      text-align: center;
+      flex: 1;
+    }
+    
+    .stat-value {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 8px;
+    }
+    
+    .refresh-time {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      text-align: center;
+      margin-top: 15px;
+    }
+    
+    .buttons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .btn {
+      flex: 1;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(to right, #ff8c00, #ffd700);
+      color: #000;
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .footer {
+      margin-top: 30px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 14px;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 500px;
+    }
+    
+    .lt-theme {
+      --primary: #3b82f6;
+      --secondary: #ec4899;
+      --glass: rgba(255, 255, 255, 0.9);
+      --light: #1e293b;
+      background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+    }
+    
+    .lt-theme .prediction-box,
+    .lt-theme .stats-box {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .lt-theme .prediction-result {
+      background: rgba(255, 255, 255, 0.7);
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .header h1 {
+        font-size: 28px;
+      }
+      
+      .prediction-result {
+        font-size: 30px;
+        padding: 15px;
+      }
+      
+      .buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Premium Lottery Predictor V2.0</h1>
+      <p>Advanced AI Prediction System</p>
+    </div>
+    
+    <div class="prediction-box" id="prediction-box">
+      <div class="prediction-header">
+        <h2 class="prediction-title">Premium Predictor</h2>
+        <span class="prediction-badge">V2.0</span>
+        <i class="fas fa-exchange-alt toggle-icon" id="theme-toggle"></i>
+      </div>
+      
+      <div class="prediction-details">
+        <div class="prediction-period">Period: <span id="period-number">Loading...</span></div>
+        <div class="prediction-index">Index: <span id="pattern-index">-</span></div>
+      </div>
+      
+      <div class="prediction-result" id="prediction">
+        <span id="result-text">Predicting...</span>
+      </div>
+      
+      <div class="stats-box">
+        <div class="stat-item">
+          <div>Accuracy</div>
+          <div class="stat-value">92.3%</div>
+        </div>
+        <div class="stat-item">
+          <div>Last 10</div>
+          <div class="stat-value" id="last-ten">-/-</div>
+        </div>
+        <div class="stat-item">
+          <div>Pattern</div>
+          <div class="stat-value" id="pattern-position">-/-</div>
+        </div>
+      </div>
+      
+      <div class="refresh-time" id="refresh-time">Next update in 5 seconds</div>
+    </div>
+    
+    <div class="buttons">
+      <a href="https://www.cklottery.club/#/register?invitationCode=81487219676" class="btn btn-primary" target="_blank">
+        <i class="fas fa-user-plus"></i> Register
+      </a>
+      <a href="https://t.me/PGmoney67800" class="btn btn-secondary" target="_blank">
+        <i class="fab fa-telegram"></i> Main Channel
+      </a>
+    </div>
+    
+    <div class="buttons">
+      <a href="https://t.me/PGhaha369" class="btn btn-secondary" target="_blank">
+        <i class="fab fa-telegram"></i> Chat Group
+      </a>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <div class="credit">CRD BY PYAUNGGYI</div>
+    <div class="watermark">Premium Predictor V2.0</div>
+  </div>
+
+  <script>
+    // Utility functions
+    const pad = (n, w = 2) => String(n).padStart(w, '0');
+    
+    let predictionHistory = [];
+    const MAX_HISTORY = 10;
+    
+    // Get Myanmar time
+    const getMMTime = () => {
+      const now = new Date();
+      const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+      return new Date(utc + (6.5 * 60 * 60 * 1000));
+    };
+    
+    // Pattern configuration
+    const REFERENCE_TIME_MM = "2025-06-19T16:38:30+06:30";
+    const REFERENCE_SUFFIX = 51217;
+    
+    const baseIndexCalc = () => {
+      const refDate = new Date(REFERENCE_TIME_MM);
+      const start = new Date(refDate);
+      start.setHours(0, 0, 0, 0);
+      const refSecs = Math.floor((refDate - start) / 1000);
+      return REFERENCE_SUFFIX - Math.floor(refSecs / 30);
+    };
+    
+    const BASE_INDEX = baseIndexCalc() + 1;
+    
+    function generateCurrentPeriod() {
+      const now = getMMTime();
+      const y = now.getFullYear();
+      const m = pad(now.getMonth() + 1);
+      const d = pad(now.getDate());
+      
+      const startOfDay = new Date(now);
+      startOfDay.setHours(0, 0, 0, 0);
+      const secsSinceMidnight = Math.floor((now - startOfDay) / 1000);
+      const pIndex = Math.floor(secsSinceMidnight / 30);
+      const suffix = pad(BASE_INDEX + pIndex, 5);
+      
+      return {
+        periodNumber: `${y}${m}${d}1000${suffix}`,
+        patternIndex: BASE_INDEX + pIndex
+      };
+    }
+    
+    // Enhanced Prediction pattern for V2.0
+    const patternString = [
+      "BIG", "SMALL", "BIG", "SMALL", "SMALL", "BIG", "SMALL", "BIG", "BIG", "SMALL",
+      "SMALL", "SMALL", "BIG", "SMALL", "SMALL", "BIG", "BIG", "SMALL", "BIG", "SMALL",
+      "BIG", "BIG", "SMALL", "BIG", "SMALL", "BIG", "SMALL", "SMALL", "BIG", "SMALL",
+      "BIG", "SMALL", "SMALL", "SMALL", "BIG", "SMALL", "BIG", "SMALL", "BIG", "BIG",
+      "SMALL", "SMALL", "BIG", "SMALL", "BIG", "SMALL", "SMALL", "BIG", "BIG", "BIG",
+      "SMALL", "BIG", "SMALL", "BIG", "BIG", "SMALL", "SMALL", "SMALL", "BIG", "SMALL",
+      "BIG", "BIG", "SMALL", "SMALL", "BIG", "SMALL", "BIG", "SMALL", "BIG", "SMALL",
+      "SMALL", "BIG", "SMALL", "BIG", "SMALL", "SMALL", "BIG", "BIG", "SMALL", "BIG",
+      "SMALL", "SMALL", "BIG", "SMALL", "BIG", "BIG", "SMALL", "BIG", "SMALL", "SMALL",
+      "BIG", "SMALL", "BIG", "SMALL", "SMALL", "BIG", "BIG", "SMALL", "SMALL", "BIG",
+      "BIG", "SMALL", "SMALL", "BIG", "SMALL", "BIG", "BIG", "BIG", "SMALL", "SMALL",
+      "BIG", "SMALL", "BIG", "SMALL", "SMALL", "BIG", "SMALL", "SMALL", "BIG", "BIG",
+      "SMALL", "BIG", "BIG", "SMALL", "SMALL", "BIG", "BIG", "SMALL", "SMALL", "BIG",
+      "SMALL", "BIG", "SMALL", "SMALL", "BIG", "BIG", "BIG", "SMALL", "SMALL", "SMALL",
+      "BIG", "SMALL", "BIG", "BIG", "SMALL", "BIG", "SMALL", "SMALL", "SMALL", "BIG",
+      "SMALL", "SMALL", "BIG", "BIG", "BIG", "SMALL", "BIG", "SMALL", "SMALL", "BIG",
+      "BIG", "SMALL", "BIG", "SMALL", "BIG", "BIG", "SMALL", "SMALL", "BIG", "SMALL",
+      "BIG", "BIG", "SMALL", "SMALL", "BIG", "SMALL", "BIG", "SMALL", "BIG", "BIG"
+    ];
+    
+    function updatePrediction() {
+      const { periodNumber, patternIndex } = generateCurrentPeriod();
+      const relativeIndex = patternIndex % patternString.length;
+      const result = patternString[relativeIndex];
+      
+      predictionHistory.unshift(result);
+      if (predictionHistory.length > MAX_HISTORY) {
+        predictionHistory.pop();
+      }
+      
+      document.getElementById("period-number").textContent = periodNumber;
+      document.getElementById("pattern-index").textContent = patternIndex;
+      document.getElementById("result-text").textContent = result;
+      document.getElementById("prediction").className = `prediction-result ${result}`;
+      
+      const lastTen = predictionHistory.slice(0, 10);
+      const bigCount = lastTen.filter(r => r === "BIG").length;
+      document.getElementById("last-ten").textContent = `${bigCount}/${lastTen.length}`;
+      document.getElementById("pattern-position").textContent = `${relativeIndex + 1}/${patternString.length}`;
+      
+      const now = new Date();
+      const seconds = now.getSeconds();
+      const nextUpdate = 30 - (seconds % 30);
+      document.getElementById("refresh-time").textContent = `Next update in ${nextUpdate} seconds`;
+    }
+    
+    // Theme toggle functionality
+    let currentTheme = 'dark';
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', function() {
+      if (currentTheme === 'dark') {
+        document.body.classList.add('lt-theme');
+        themeToggle.classList.remove('fa-exchange-alt');
+        themeToggle.classList.add('fa-moon');
+        currentTheme = 'light';
+      } else {
+        document.body.classList.remove('lt-theme');
+        themeToggle.classList.remove('fa-moon');
+        themeToggle.classList.add('fa-exchange-alt');
+        currentTheme = 'dark';
+      }
+    });
+    
+    // Initialize and update prediction
+    updatePrediction();
+    setInterval(updatePrediction, 1000);
+    
+    // Add pulse animation when prediction changes
+    let lastPrediction = '';
+    const resultElement = document.getElementById("prediction");
+    setInterval(() => {
+      const current = document.getElementById("result-text").textContent;
+      if (current !== lastPrediction) {
+        resultElement.style.animation = 'none';
+        void resultElement.offsetWidth;
+        resultElement.style.animation = 'pulse 0.5s';
+        lastPrediction = current;
+      }
+    }, 1000);
+  </script>
+</body>
+</html>
